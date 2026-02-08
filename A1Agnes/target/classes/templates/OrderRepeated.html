@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order History</title>
+</head>
+<body>
+
+<h2>Order History</h2>
+
+<div th:if="${orders == null || #lists.isEmpty(orders)}">
+    <p>No orders yet.</p>
+</div>
+
+<div th:if="${orders != null && !#lists.isEmpty(orders)}">
+    <div th:each="o : ${orders}" style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+        <p><b>ID:</b> <span th:text="${o.id}"></span></p>
+        <p><b>Time:</b> <span th:text="${o.orderTime}"></span></p>
+        <p><b>Name:</b> <span th:text="${o.customerName}"></span></p>
+        <p><b>Pizza:</b> <span th:text="${o.size}"></span> /
+            <span th:text="${o.crust}"></span>
+        </p>
+        <p><b>Qty:</b> <span th:text="${o.quantity}"></span></p>
+
+        <p><b>Toppings:</b>
+            <span th:if="${o.toppings == null || #lists.isEmpty(o.toppings)}">None</span>
+            <span th:if="${o.toppings != null && !#lists.isEmpty(o.toppings)}"
+                  th:text="${#strings.listJoin(o.toppings, ', ')}"></span>
+        </p>
+
+        <p><b>Delivery:</b> <span th:text="${o.delivery ? 'Yes' : 'No'}"></span></p>
+        <p th:if="${o.delivery}">
+            <b>Address:</b> <span th:text="${o.deliveryAddress}"></span>
+        </p>
+
+        <hr>
+        <p>
+            <b>Subtotal:</b> $<span th:text="${#numbers.formatDecimal(o.subtotal, 1, 2)}"></span>
+            &nbsp; | &nbsp;
+            <b>Discount:</b> -$<span th:text="${#numbers.formatDecimal(o.discountAmount, 1, 2)}"></span>
+            &nbsp; | &nbsp;
+            <b>Tax:</b> $<span th:text="${#numbers.formatDecimal(o.tax, 1, 2)}"></span>
+            &nbsp; | &nbsp;
+            <b>Total:</b> $<span th:text="${#numbers.formatDecimal(o.total, 1, 2)}"></span>
+        </p>
+    </div>
+</div>
+
+<a href="/">New Order</a>
+
+</body>
+</html>
